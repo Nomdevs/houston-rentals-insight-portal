@@ -10,33 +10,111 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as GetStartedRouteImport } from './routes/get-started'
+import { Route as ListingsRouteImport } from './routes/listings'
+import { Route as NeighborhoodsRouteImport } from './routes/neighborhoods'
+import { Route as ListingsIndexRouteImport } from './routes/listings.index'
+import { Route as ListingsIdRouteImport } from './routes/listings.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GetStartedRoute = GetStartedRouteImport.update({
+  id: '/get-started',
+  path: '/get-started',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsRoute = ListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NeighborhoodsRoute = NeighborhoodsRouteImport.update({
+  id: '/neighborhoods',
+  path: '/neighborhoods',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListingsIndexRoute = ListingsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ListingsRoute,
+} as any)
+const ListingsIdRoute = ListingsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ListingsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/events': typeof EventsRoute
+  '/get-started': typeof GetStartedRoute
+  '/listings': typeof ListingsRouteWithChildren
+  '/neighborhoods': typeof NeighborhoodsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings/': typeof ListingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/events': typeof EventsRoute
+  '/get-started': typeof GetStartedRoute
+  '/neighborhoods': typeof NeighborhoodsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings': typeof ListingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/events': typeof EventsRoute
+  '/get-started': typeof GetStartedRoute
+  '/listings': typeof ListingsRouteWithChildren
+  '/neighborhoods': typeof NeighborhoodsRoute
+  '/listings/$id': typeof ListingsIdRoute
+  '/listings/': typeof ListingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/events'
+    | '/get-started'
+    | '/listings'
+    | '/neighborhoods'
+    | '/listings/$id'
+    | '/listings/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/events'
+    | '/get-started'
+    | '/neighborhoods'
+    | '/listings/$id'
+    | '/listings'
+  id:
+    | '__root__'
+    | '/'
+    | '/events'
+    | '/get-started'
+    | '/listings'
+    | '/neighborhoods'
+    | '/listings/$id'
+    | '/listings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EventsRoute: typeof EventsRoute
+  GetStartedRoute: typeof GetStartedRoute
+  ListingsRoute: typeof ListingsRouteWithChildren
+  NeighborhoodsRoute: typeof NeighborhoodsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +126,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/get-started': {
+      id: '/get-started'
+      path: '/get-started'
+      fullPath: '/get-started'
+      preLoaderRoute: typeof GetStartedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings': {
+      id: '/listings'
+      path: '/listings'
+      fullPath: '/listings'
+      preLoaderRoute: typeof ListingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/neighborhoods': {
+      id: '/neighborhoods'
+      path: '/neighborhoods'
+      fullPath: '/neighborhoods'
+      preLoaderRoute: typeof NeighborhoodsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/listings/': {
+      id: '/listings/'
+      path: '/'
+      fullPath: '/listings/'
+      preLoaderRoute: typeof ListingsIndexRouteImport
+      parentRoute: typeof ListingsRoute
+    }
+    '/listings/$id': {
+      id: '/listings/$id'
+      path: '/$id'
+      fullPath: '/listings/$id'
+      preLoaderRoute: typeof ListingsIdRouteImport
+      parentRoute: typeof ListingsRoute
+    }
   }
 }
 
+interface ListingsRouteChildren {
+  ListingsIdRoute: typeof ListingsIdRoute
+  ListingsIndexRoute: typeof ListingsIndexRoute
+}
+
+const ListingsRouteChildren: ListingsRouteChildren = {
+  ListingsIdRoute: ListingsIdRoute,
+  ListingsIndexRoute: ListingsIndexRoute,
+}
+
+const ListingsRouteWithChildren = ListingsRoute._addFileChildren(
+  ListingsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EventsRoute: EventsRoute,
+  GetStartedRoute: GetStartedRoute,
+  ListingsRoute: ListingsRouteWithChildren,
+  NeighborhoodsRoute: NeighborhoodsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

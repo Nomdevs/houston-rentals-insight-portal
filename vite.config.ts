@@ -12,6 +12,7 @@ const config = defineConfig({
     nitro({
       preset: 'cloudflare-module',
       prerender: {
+        concurrency: 1,
         routes: [
           '/',
           '/listings',
